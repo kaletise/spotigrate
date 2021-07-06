@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve back-end of Spotigrate
+After=network.target
+
+[Service]
+User=spotigrate
+Group=www-data
+WorkingDirectory=/home/spotigrate/spotigrate/src
+Environment="PATH=/home/spotigrate/spotigrate/venv/bin"
+ExecStart=/home/spotigrate/spotigrate/venv/bin/uwsgi --ini /home/spotigrate/spotigrate/src/wsgi.ini
+
+[Install]
+WantedBy=multi-user.target
