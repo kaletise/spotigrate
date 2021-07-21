@@ -12,6 +12,8 @@
 <script>
 import VueCookies from 'vue-cookies';
 
+import * as api from '@/api';
+
 export default {
     data() {
         return {
