@@ -60,7 +60,7 @@ class UserLifeCycle:
                 {'$set': {'status': self.status}}
             )
 
-    def start(self):
+    def execute(self):
         access_token = self.check_token()
         track = api.spotify.API.currently_playing(access_token)
         if not track:
@@ -92,10 +92,15 @@ class UserLifeCycle:
                 self.status['song'] = song
                 self.status['reason'] = 2
                 return self.drop()
+        self.status['tick'] += 1
         if self.status['broadcasting'] and self.status['song'] == song:
-            if self.settings['mode'] == 1:
+            if self.settings['mode'] == 1 and not self.status['tick'] % 30:
                 for token in self.tokens:
                     api.vkontakte.Client(token).method('account.setOnline')
+            if not self.status['tick'] % 12:
+                api.vkontakte.Client(token).method(
+                    'audio.setBroadcast', audio=cache[song]
+                )
             return
         if song in cache and cache[song] == 0:
             self.status['song'] = song
@@ -153,7 +158,7 @@ class Daemon:
             for user in app.db.user.find({}):
                 # async?
                 try:
-                    UserLifeCycle(app, user).start()
+                    UserLifeCycle(app, user).execute()
                 except Exception:
                     exc = traceback.format_exc()
                     app.logger.error(

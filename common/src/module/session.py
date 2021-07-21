@@ -64,7 +64,8 @@ class Session:
         status = {
             'broadcasting': False,
             'song': '',
-            'reason': 0
+            'reason': 0,
+            'tick': 0
         }
         settings = {
             'enabled': True,

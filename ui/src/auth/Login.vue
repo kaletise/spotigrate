@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <template v-if="!loading">
-            <a class="button" role="button" href="https://accounts.spotify.com/authorize?client_id=4fbb1a9192cc4c3fada8a35993aff0d0&response_type=code&redirect_uri=https://spotigrate.ru/callback&scope=user-read-currently-playing,user-read-playback-state">LOG IN WITH SPOTIFY</a>
+            <a class="button" role="button" :href="link">LOG IN WITH SPOTIFY</a>
         </template>
         <template v-else>
             <h3>Загрузка...</h3>
@@ -15,14 +15,20 @@ import VueCookies from 'vue-cookies';
 export default {
     data() {
         return {
-            loading: true
+            loading: true,
+            link: ''
         }
     },
     created() {
         if (VueCookies.isKey('session_id')) {
             window.location.href = '/dashboard';
         } else {
-            this.loading = false;
+            api.call('info.getAuthLink').then((response) => {
+                if (response.data.status == 1) {
+                    this.link = response.data.link;
+                }
+                this.loading = false;
+            });
         }
     }
 }

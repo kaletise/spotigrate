@@ -40,10 +40,7 @@ class Application:
 
         self.running = True
 
-        if self.config.get('PRODUCTION'):
-            self.client = self.config.get('PRODUCTION_CLIENT')
-        else:
-            self.client = self.config.get('DEVELOPMENT_CLIENT')
+        self.client = self.config.get('CALLBACK_URI')
 
         self.authorization = 'Basic ' + base64.b64encode(
             self.config.get('SPOTIFY_APP_ID').encode() + b':' +

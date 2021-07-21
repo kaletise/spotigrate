@@ -47,14 +47,20 @@ class Main:
             f'{utils.utils.get_platform()}...'
         )
 
+        if self.config.first_init:
+            return self.logger.info(
+                'Further configuration is required before using Spotigrate. '
+                'Please fill out the newly created configuration file '
+                'config.json and run Spotigrate again'
+            )
+
         database_time = time.perf_counter()
         self.database = self._load_database()
         self.logger.info(
             f'Connecting to database {self.database.host}...'
         )
         if not storage.database.loaded:
-            self.logger.error(MODULE_ERROR % 'pymongo')
-            return
+            return self.logger.error(MODULE_ERROR % 'pymongo')
         connected = self._test_database()
         database_complete_time = time.perf_counter()
         if connected:
@@ -81,8 +87,7 @@ class Main:
             'Loading webserver...'
         )
         if not web.server.loaded:
-            self.logger.error(MODULE_ERROR % 'flask')
-            return
+            return self.logger.error(MODULE_ERROR % 'flask')
         self.webserver = self._load_webserver()
         if connected:
             self.webserver.register_event('*', self.application.handler)
@@ -156,9 +161,9 @@ class Main:
         return web.server.WebServer('spotigrate')
 
     def _get_current_error_logger(self):
-        if self.logger:
+        try:
             return self.logger.error
-        else:
+        except Exception:
             return print
 
 

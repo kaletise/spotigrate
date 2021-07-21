@@ -10,6 +10,7 @@ class Config:
         self.data = {}
         self.indent = indent
         self.sort_keys = sort_keys
+        self.first_init = False
         if auto_init:
             self.init()
 
@@ -17,6 +18,7 @@ class Config:
         if os.path.isfile(self.file):
             self.load()
         else:
+            self.first_init = True
             self.data = self.default
             self.save()
 
