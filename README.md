@@ -18,7 +18,7 @@
 ### Команды для развертывания:
 #### Загрузка исходного кода из репозитория:
 ```
-git clone https://github.com/spotigrate/spotigrate.git
+git clone https://github.com/kaletise/spotigrate.git
 ```
 
 #### Развертывание и запуск back-end
