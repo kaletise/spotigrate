@@ -53,9 +53,7 @@ class WebServer:
 
         @self.app.after_request
         def cors(response):
-            response.headers.add(
-                'Access-Control-Allow-Origin', 'https://spotigrate.ru'
-            )
+            response.headers.add('Access-Control-Allow-Origin', '*')
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response
 
